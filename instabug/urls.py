@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from bugs.views import BugsCreateView, BugsRetrieveView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('bugs/', BugsCreateView.as_view()),
+    path('bugs/<number>/', BugsRetrieveView.as_view()),
 ]

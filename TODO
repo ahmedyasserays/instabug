@@ -6,9 +6,9 @@
     ☐ rails container (will be replaced by django container)
         ✔ state model @done(24-05-18 20:23)
         ✔ bug model @done(24-05-18 20:23)
-        ☐ POST /bugs endpoint (publish the data to rabbit mq and generate a correct bug number)
-        ☐ bugs consumer that gets the data from rabbit mq and save it to the db
-        ☐ GET /bugs/<number> with indices
+        ✔ POST /bugs endpoint @done(24-05-18 22:19)
+        ✔ GET /bugs/<number> with indices @done(24-05-18 22:12)
+        ☐ use rabbit mq to publish data to a consumer that writes the data to the db instead of writing it directly
         ☐ specs to text endpoints (bonus)
         ☐ api versioning (bonus)
     ✔ db container @done(24-05-18 20:23)
