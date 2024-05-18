@@ -1,6 +1,30 @@
+version: '3.9'
+
 services:
+  postgres:
+    image: postgres:14-alpine
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=verysecretpassword
+      - POSTGRES_USER=instabug
+      - POSTGRES_DB=instabug
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U instabug"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   app:
     build: .
-    command: gunicorn --workers 2 --bind 0.0.0.0:4000 --preload instabug.wsgi:application
+    command: ./run.sh
     ports:
-      - "4000:4000"
+      - "7000:4000"
+    environment:
+      - DATABASE_URL=postgresql://instabug:verysecretpassword@postgres:5432/instabug
+      - ALLOWED_HOSTS=127.0.0.1
+      - DEBUG=True
+    depends_on:
+      postgres:
+        condition: service_healthy
+
