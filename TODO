@@ -1,0 +1,15 @@
+☐ docker-compose up to run the whole stack
+    ☐ use differnt ports other than default in docker images
+    ☐ elastic search container
+        ☐ search for bugs with exact search for all fields and partial search in comment
+    ☐ rabbitmq container
+    ☐ rails container (will be replaced by django container)
+        ☐ state model
+        ☐ bug model
+        ☐ POST /bugs endpoint (publish the data to rabbit mq and generate a correct bug number)
+        ☐ bugs consumer that gets the data from rabbit mq and save it to the db
+        ☐ GET /bugs/<number> with indices
+        ☐ specs to text endpoints (bonus)
+        ☐ api versioning (bonus)
+    ☐ db container
+☐ commands to test the app
