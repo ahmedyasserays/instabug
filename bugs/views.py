@@ -1,4 +1,3 @@
-from django.db import transaction
 from django.db.models import Max
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import (
@@ -9,17 +8,19 @@ from rest_framework.generics import (
 
 from .models import Bug
 from .serializers import BugSerializer
+from .tasks import save_bug
 
 
 class BugsCreateView(CreateAPIView):
     serializer_class = BugSerializer
 
-    @transaction.atomic
     def perform_create(self, serializer):
         last_number = Bug.objects.filter(
             application_token=serializer.validated_data["application_token"]
         ).aggregate(last_number=Max("number", default=0))["last_number"]
-        serializer.save(number=last_number + 1)
+        data = serializer.validated_data
+        data["number"] = last_number + 1
+        save_bug.delay(data)
 
 
 class BugsRetrieveView(RetrieveAPIView):

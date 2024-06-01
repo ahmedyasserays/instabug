@@ -132,3 +132,6 @@ MEDIA_ROOT = env.str("MEDIA_ROOT", "media/")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)

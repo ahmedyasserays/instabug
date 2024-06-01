@@ -8,7 +8,9 @@
         ✔ bug model @done(24-05-18 20:23)
         ✔ POST /bugs endpoint @done(24-05-18 22:19)
         ✔ GET /bugs/<number> with indices @done(24-05-18 22:12)
-        ☐ use rabbit mq to publish data to a consumer that writes the data to the db instead of writing it directly
+        ✔ use rabbit mq to publish data to a consumer that writes the data to the db instead of writing it directly @done(24-06-01 19:24)
+        ☐ use custom rabbit mq implementation
+        ☐ make sure that no duplicate numbers will be created if two requests are sent in the same time
         ☐ specs to text endpoints (bonus)
         ☐ api versioning (bonus)
     ✔ db container @done(24-05-18 20:23)

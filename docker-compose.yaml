@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   postgres:
@@ -15,6 +15,14 @@ services:
       timeout: 5s
       retries: 5
 
+  rabbit-mq:
+    image: rabbitmq:3.13.2
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 30s
+      retries: 3
+
   app:
     build: .
     command: ./run.sh
@@ -27,4 +35,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rabbit-mq:
+        condition: service_healthy
 
+  celery:
+    build: .
+    command: celery -A instabug worker -l INFO
+    environment:
+      - DATABASE_URL=postgresql://instabug:verysecretpassword@postgres:5432/instabug
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbit-mq:5672//
+    depends_on:
+      rabbit-mq:
+        condition: service_healthy
