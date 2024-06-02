@@ -1,3 +1,4 @@
+from django.db.models import Max
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import (
     CreateAPIView,
@@ -19,6 +20,12 @@ class BugsCreateView(CreateAPIView):
         bug_store = RedisBugStore(application_token)
         with bug_store:
             last_number = bug_store.get_last_number()
+            if last_number == 0:
+                last_number = Bug.objects.filter(
+                    application_token=application_token
+                ).aggregate(last_number=Max("number", default=0))[
+                    "last_number"
+                ]
             data = serializer.validated_data
             data["number"] = last_number + 1
             bug_store.update_last_number(data["number"])
