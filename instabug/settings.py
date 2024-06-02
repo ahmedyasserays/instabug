@@ -133,5 +133,10 @@ MEDIA_ROOT = env.str("MEDIA_ROOT", "media/")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# CELERY
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
+
+
+# REDIS
+REDIS_HOST = env("REDIS_HOST", default="localhost")
+REDIS_PORT = env("REDIS_PORT", default=6379, cast=int)
