@@ -29,7 +29,7 @@ class RedisBugStore:
 
     def lock(self):
         key = self.get_lock_key()
-        self.lock_obj = client.lock(key, 10, blocking=True)
+        self.lock_obj = client.lock(key, 10, blocking=True, sleep=0.001)
         return self.lock_obj.acquire(blocking=True)
 
     def unlock(self):

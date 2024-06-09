@@ -33,3 +33,6 @@ class Bug(models.Model):
         indexes = [
             models.Index(fields=["application_token", "number"]),
         ]
+
+    def __str__(self) -> str:
+        return f"{self.application_token}:{self.number}"
