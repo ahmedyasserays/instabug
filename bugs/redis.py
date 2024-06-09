@@ -1,6 +1,6 @@
 import redis
-from django.conf import settings
 import redis.lock
+from django.conf import settings
 
 client = redis.Redis(
     host=settings.REDIS_HOST,
@@ -8,27 +8,27 @@ client = redis.Redis(
 )
 
 
-class RedisBugStore:
-    def __init__(self, application_token: str) -> None:
-        self.application_token = application_token
+class LastNumberStore:
+    def __init__(self, identifier: str) -> None:
+        self.identifier = identifier
 
-    def get_number_key(self) -> str:
-        return f"application_last_number_{self.application_token}"
+    def _get_number_key(self) -> str:
+        return f"application_last_number_{self.identifier}"
+
+    def _get_lock_key(self) -> str:
+        return f"application_lock_{self.identifier}"
 
     def get_last_number(self) -> int:
-        key = self.get_number_key()
+        key = self._get_number_key()
         number = client.get(key)
         return int(number) if number else 0
 
     def update_last_number(self, number: int):
-        key = self.get_number_key()
+        key = self._get_number_key()
         client.set(key, number)
 
-    def get_lock_key(self) -> str:
-        return f"application_lock_{self.application_token}"
-
     def lock(self):
-        key = self.get_lock_key()
+        key = self._get_lock_key()
         self.lock_obj = client.lock(key, 10, blocking=True, sleep=0.001)
         return self.lock_obj.acquire(blocking=True)
 

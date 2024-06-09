@@ -15,3 +15,7 @@
         ☐ api versioning (bonus)
     ✔ db container @done(24-05-18 20:23)
 ☐ commands to test the app
+☐ move secrets to file instead of public
+☐ don't need to collect static if no updated files
+☐ github actions
+☐ deploy using cloudrun

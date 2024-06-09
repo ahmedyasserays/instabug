@@ -1,3 +1,5 @@
+import logging
+
 from django.db.models import Max
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import (
@@ -7,9 +9,11 @@ from rest_framework.generics import (
 )
 
 from .models import Bug
+from .redis import LastNumberStore
 from .serializers import BugSerializer
 from .tasks import save_bug
-from .redis import RedisBugStore
+
+logger = logging.getLogger()
 
 
 class BugsCreateView(CreateAPIView):
@@ -17,7 +21,7 @@ class BugsCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         application_token = serializer.validated_data["application_token"]
-        bug_store = RedisBugStore(application_token)
+        bug_store = LastNumberStore(application_token)
         with bug_store:
             last_number = bug_store.get_last_number()
             if last_number == 0:

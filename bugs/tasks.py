@@ -1,7 +1,7 @@
 import logging
 from celery import shared_task
 from django.db import transaction
-from .redis import RedisBugStore
+from .redis import LastNumberStore
 from .serializers import BugSerializer
 
 logger = logging.getLogger()
@@ -17,7 +17,7 @@ def save_bug(data):
     except Exception as e:
         logger.error(f"got error {e}")
         logger.error(f"couldn't save bug from data: {data}")
-        store = RedisBugStore(data["application_token"])
+        store = LastNumberStore(data["application_token"])
         with store:
             store.update_last_number(0)
         raise e
